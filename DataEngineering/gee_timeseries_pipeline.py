@@ -3,11 +3,16 @@ import numpy as np
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # ==================================================
 # CONFIG
 # ==================================================
 
-PROJECT_ID = "agritech-493010"
+PROJECT_ID = os.getenv("EE_PROJECT_ID")
 
 try:
     ee.Initialize(project=PROJECT_ID)
