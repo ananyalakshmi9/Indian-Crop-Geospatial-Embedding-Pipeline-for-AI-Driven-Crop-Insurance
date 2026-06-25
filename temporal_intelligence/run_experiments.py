@@ -82,6 +82,12 @@ def run_temporal_experiments(data_dir="../DataEngineering"):
     trans_model = TransformerClassifier(in_channels=17, embedding_dim=d_model, num_layers=n_layers, nhead=8, num_classes=4)
     
     train_model(mamba_model, train_loader, epochs=8)
+    
+    # Save the trained Mamba model checkpoint
+    checkpoint_path = os.path.join(os.path.dirname(__file__), "mamba_paddy_pilot.pt")
+    torch.save(mamba_model.state_dict(), checkpoint_path)
+    print(f"[Mamba Checkpointing] Saved trained Mamba weights to: {checkpoint_path}")
+    
     train_model(lstm_model, train_loader, epochs=8)
     train_model(trans_model, train_loader, epochs=8)
     
