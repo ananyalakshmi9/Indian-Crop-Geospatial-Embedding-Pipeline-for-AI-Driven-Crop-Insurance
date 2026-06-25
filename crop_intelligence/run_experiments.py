@@ -149,7 +149,7 @@ def run_crop_intelligence_suite():
         # Simulated run for CLI feedback
         claim_1 = {
             "claim_id": "CLM-9820-A",
-            "validation_decision": "APPROVED",
+            "validation_decision": "RECOMMEND_APPROVE",
             "confidence_score": 0.88,
             "reported_crop": "Paddy",
             "detected_crop_match": "Paddy",
@@ -157,7 +157,12 @@ def run_crop_intelligence_suite():
             "reported_cause": "Drought",
             "incident_stage": "Flowering/Reproductive",
             "estimated_yield_loss_pct": stressed_stress["estimated_yield_loss_pct"],
-            "biological_evidence": "Satellite-retrieved moisture deficits confirm severe water stress during the critical Flowering stage (Sensitivity Ky: 1.2). Yield loss of " + str(stressed_stress["estimated_yield_loss_pct"]) + "% estimated."
+            "biological_evidence": "Satellite-retrieved moisture deficits confirm severe water stress during the critical Flowering stage (Sensitivity Ky: 1.2). Yield loss of " + str(stressed_stress["estimated_yield_loss_pct"]) + "% estimated (biophysically validated by weather and Mamba models).",
+            "human_auditor_action_items": [
+                f"Generate payout estimate based on the validated yield loss of {stressed_stress['estimated_yield_loss_pct']}%.",
+                "Verify bank account details and land ownership records.",
+                "Cross-check yield loss estimation with regional agricultural officer reports."
+            ]
         }
         claims_results.append(claim_1)
         
@@ -172,6 +177,10 @@ def run_crop_intelligence_suite():
         print(f"Auditor Decision:  {c['validation_decision']}")
         print(f"Confidence Score:  {c['confidence_score']}")
         print(f"Biological Report: {c['biological_evidence']}")
+        if "human_auditor_action_items" in c:
+            print("Auditor Action Items:")
+            for item in c["human_auditor_action_items"]:
+                print(f"  - [ ] {item}")
         print("-" * 50)
 
     # --------------------------------------------------------------------------
@@ -265,7 +274,8 @@ def run_crop_intelligence_suite():
     plt.suptitle("Phenological Crop Intelligence & Stage-Aware Claim Audits Dashboard", fontweight='bold', fontsize=16)
     plt.tight_layout()
     
-    output_png = os.path.join(os.path.dirname(__file__), "crop_stress_validation_report.png")
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    output_png = os.path.join(root_dir, "crop_stress_validation_report.png")
     plt.savefig(output_png, dpi=300, bbox_inches='tight')
     print(f"\nSUCCESS: Visualization generated and saved to: '{output_png}'")
     
